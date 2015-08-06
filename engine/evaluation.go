@@ -9,10 +9,14 @@ const squareControlMultiplier = 0.1
 
 func pieceValue(p gmc.Piece) int {
 	switch p.Type() {
-		case gmc.Pawn: return 1
-		case gmc.Knight, gmc.Bishop: return 3
-		case gmc.Rook: return 5
-		case gmc.Queen: return 9
+	case gmc.Pawn:
+		return 1
+	case gmc.Knight, gmc.Bishop:
+		return 3
+	case gmc.Rook:
+		return 5
+	case gmc.Queen:
+		return 9
 	}
 	return 0
 }
@@ -37,5 +41,5 @@ func evaluateSquareControl(b *gmc.Board) float64 {
 }
 
 func evaluate(b *gmc.Board) float64 {
-	return evaluateMaterial(b) * materialMultiplier + evaluateSquareControl(b) * squareControlMultiplier
+	return evaluateMaterial(b)*materialMultiplier + evaluateSquareControl(b)*squareControlMultiplier
 }
