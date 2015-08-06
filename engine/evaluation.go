@@ -1,19 +1,41 @@
-package main
+package engine
 
 import (
-	"fmt"
 	gmc "github.com/malbrecht/chess"
 )
 
-func Evaluate(b *gmc.Board) int {
-	return 1
+const materialMultiplier = 1.0
+const squareControlMultiplier = 0.1
+
+func pieceValue(p gmc.Piece) int {
+	switch p.Type() {
+		case gmc.Pawn: return 1
+		case gmc.Knight, gmc.Bishop: return 3
+		case gmc.Rook: return 5
+		case gmc.Queen: return 9
+	}
+	return 0
 }
 
-func main() {
-	board := gmc.MustParseFen("r4rk1/2pp1ppp/8/8/5P2/8/PPPPP1PP/RNBQKBNR b KQ c3 0 12")
-	s := Evaluate(board)
-	fmt.Printf("%d\n", s)
-	moves := board.LegalMoves()
-	fmt.Printf(moves[0].San(board))
-	fmt.Printf("\n")
+func evaluateMaterial(b *gmc.Board) float64 {
+	total := 0.0
+	for rank := 0; rank < 8; rank++ {
+		for file := 0; file < 8; file++ {
+			piece := b.Piece[gmc.Square(file, rank)]
+			if piece.Color() == gmc.White {
+				total += float64(pieceValue(piece))
+			} else {
+				total -= float64(pieceValue(piece))
+			}
+		}
+	}
+	return total
+}
+
+func evaluateSquareControl(b *gmc.Board) float64 {
+	return 0
+}
+
+func evaluate(b *gmc.Board) float64 {
+	return evaluateMaterial(b) * materialMultiplier + evaluateSquareControl(b) * squareControlMultiplier
 }

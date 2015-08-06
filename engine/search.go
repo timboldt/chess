@@ -1,7 +1,7 @@
 package engine
 
 import (
-	"container/heap"
+	//"container/heap"
 	"fmt"
 	gmc "github.com/malbrecht/chess"
 )
